@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 60em;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem 0;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+
+        p, ul {
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.3rem;
+        }
+
+        a {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: #000;
+        }
+
+        code {
+            font-family: 'Source Code Pro', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .repos {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .repos li {
+            margin-bottom: 0.5rem;
+        }
+
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .command-table th,
+        .command-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .command-table th {
+            background: #f8f9fa;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .command-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .command-syntax {
+            font-family: 'Source Code Pro', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.9em;
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .tree-closed {
+            color: #999;
+            text-decoration: none;
+        }
+
+        .tree-closed::after {
+            content: " [TREE CLOSED]";
+            color: #666;
+            text-decoration: none;
+        }
+
+        .tree-closed-label {
+            color: #666;
+            text-decoration: none !important;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2rem 0;
+        }
+
+        .announcement {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 0.75rem 0;
+            color: #495057;
+            text-align: center;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="announcement">
+        <strong>Maintenance Notice:</strong> Bors will be offline for scheduled maintenance from 18:00 to 20:00 UTC on September 1, 2025.
+    </div>
+
+    <div class="container">
+        <h1>Bors</h1>
+
+        <h2>Repository</h2>
+        <ul class="repos">
+            <li><a href="queue/rust">rust</a></li>
+        </ul>
+
+        <hr>
+
+        <h2>Commands</h2>
+
+        <p>Commands must be posted as comments on the PR. Comments must mention the bot account (e.g. <code>@bors</code>).</p>
+
+        <table class="command-table">
+            <thead>
+                <tr>
+                    <th>Command</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="command-syntax">info</span></td>
+                    <td>Get information about the current PR.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">ping</span></td>
+                    <td>Send a ping to bors to check responsiveness.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">help</span></td>
+                    <td>Print help message with available commands.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">rollup=&lt;never|iffy|maybe|always&gt;</span></td>
+                    <td>Mark the PR as "always", "maybe", "iffy", or "never" rollup-able.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">rollup</span></td>
+                    <td>Short for <code>rollup=always</code>.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">rollup-</span></td>
+                    <td>Short for <code>rollup=maybe</code>.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">p=&lt;priority&gt;</span></td>
+                    <td>Set the priority of the approved PR (defaults to 0).</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">r=&lt;user&gt;</span></td>
+                    <td>Approve a PR on behalf of specified user.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">r+</span></td>
+                    <td>Approve a PR.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">r-</span></td>
+                    <td>Unapprove a PR.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">try</span></td>
+                    <td>Start a try build based on the most recent commit from the main branch.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">try parent=&lt;sha&gt;</span></td>
+                    <td>Start a try build based on the specified parent commit.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">try parent=last</span></td>
+                    <td>Start a try build based on the parent commit of the last try build.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">try jobs=&lt;job1,job2,...&gt;</span></td>
+                    <td>Start a try build with specific CI jobs (up to 10).</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">try cancel</span></td>
+                    <td>Cancel a running try build.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">delegate=&lt;try|review&gt;</span></td>
+                    <td>Delegate try or review permissions to the PR author.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">delegate+</span></td>
+                    <td>Delegate review permissions to the PR author.</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">delegate-</span></td>
+                    <td>Remove any previously granted delegation.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Examples</h3>
+        <ul>
+            <li><code>@bors r+ p=1</code></li>
+            <li><code>@bors try parent=abcd123</code></li>
+            <li><code>@bors rollup=always</code></li>
+            <li><code>@bors delegate=review</code></li>
+            <li><code>@bors delegate=try</code></li>
+            <li><code>@bors try @rust-timer queue</code>: Short-hand for compile-perf benchmarking of PRs.</li>
+        </ul>
+    </div>
+</body>
+</html>
