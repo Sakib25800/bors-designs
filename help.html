@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bors</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
+    <title>Bors - Help Documentation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -45,7 +48,8 @@
             margin: 1.5rem 0 0.8rem 0;
         }
 
-        p, ul {
+        p,
+        ul {
             margin-bottom: 1rem;
         }
 
@@ -58,20 +62,30 @@
         }
 
         a {
-            color: #333;
+            color: #24292f;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        a:hover,
+        a:focus {
+            color: #28607F !important;
             text-decoration: underline;
         }
 
-        a:hover {
-            color: #000;
+        /* Ensure GitHub links stay GitHub blue */
+        a[href^="https://github.com"]:hover,
+        a[href^="https://github.com"]:focus {
+            color: #0366d6 !important;
         }
 
         code {
             font-family: 'Source Code Pro', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            background: #f5f5f5;
+            background: #f6f8fa;
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
             font-size: 0.9em;
+            color: #24292f;
         }
 
         .repos {
@@ -97,36 +111,33 @@
         }
 
         .command-table th {
-            background: #f8f9fa;
+            background: #f6f8fa;
             font-weight: 500;
-            color: #333;
-        }
-
-        .command-table tr:hover {
-            background: #f8f9fa;
+            color: #24292f;
         }
 
         .command-syntax {
             font-family: 'Source Code Pro', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
             font-size: 0.9em;
-            background: #f5f5f5;
+            background: #f6f8fa;
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
+            color: #24292f;
         }
 
         .tree-closed {
-            color: #999;
+            color: #28607F;
             text-decoration: none;
         }
 
         .tree-closed::after {
             content: " [TREE CLOSED]";
-            color: #666;
+            color: #28607F;
             text-decoration: none;
         }
 
         .tree-closed-label {
-            color: #666;
+            color: #28607F;
             text-decoration: none !important;
         }
 
@@ -137,34 +148,81 @@
         }
 
         .announcement {
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
-            padding: 0.75rem 0;
-            color: #495057;
+            background: #f6f8fa;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 1rem 0;
+            color: #24292f;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             width: 100%;
+        }
+
+        .announcement strong {
+            font-weight: 500;
+            color: #24292f;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.2;
+            border-radius: 6px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #28607F;
+            border: 1px solid #28607F;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #3278a0;
+            border-color: #3278a0;
+        }
+
+        .btn-outline {
+            color: #28607F;
+            background-color: #ffffff;
+            border: 1px solid #28607F;
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background-color: #f6f8fa;
+            border-color: #3278a0;
+            color: #3278a0;
         }
     </style>
 </head>
+
 <body>
     <div class="announcement">
-        <strong>Maintenance Notice:</strong> Bors will be offline for scheduled maintenance from 18:00 to 20:00 UTC on September 1, 2025.
+        <strong>Maintenance Notice:</strong> Bors will be offline for scheduled maintenance from 18:00 to 20:00 UTC on
+        September 1, 2025.
     </div>
 
     <div class="container">
         <h1>Bors</h1>
 
-        <h2>Repository</h2>
+        <h2>Repositories</h2>
         <ul class="repos">
-            <li><a href="queue/rust">rust</a></li>
+            <li><a href="/rust/queue">rust</a></li>
         </ul>
 
         <hr>
 
         <h2>Commands</h2>
 
-        <p>Commands must be posted as comments on the PR. Comments must mention the bot account (e.g. <code>@bors</code>).</p>
+        <p>Commands must be posted as comments on the PR. Comments must mention the bot account (e.g.
+            <code>@bors</code>).
+        </p>
 
         <table class="command-table">
             <thead>
@@ -176,75 +234,75 @@
             <tbody>
                 <tr>
                     <td><span class="command-syntax">info</span></td>
-                    <td>Get information about the current PR.</td>
+                    <td>Get information about the current PR</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">ping</span></td>
-                    <td>Send a ping to bors to check responsiveness.</td>
+                    <td>Send a ping to bors to check responsiveness</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">help</span></td>
-                    <td>Print help message with available commands.</td>
+                    <td>Print help message with available commands</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">rollup=&lt;never|iffy|maybe|always&gt;</span></td>
-                    <td>Mark the PR as "always", "maybe", "iffy", or "never" rollup-able.</td>
+                    <td>Mark the PR as "always", "maybe", "iffy", or "never" rollup-able</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">rollup</span></td>
-                    <td>Short for <code>rollup=always</code>.</td>
+                    <td>Short for <code>rollup=always</code></td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">rollup-</span></td>
-                    <td>Short for <code>rollup=maybe</code>.</td>
+                    <td>Short for <code>rollup=maybe</code></td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">p=&lt;priority&gt;</span></td>
-                    <td>Set the priority of the approved PR (defaults to 0).</td>
+                    <td>Set the priority of the approved PR (defaults to 0)</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">r=&lt;user&gt;</span></td>
-                    <td>Approve a PR on behalf of specified user.</td>
+                    <td>Approve the PR on behalf of the specified user</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">r+</span></td>
-                    <td>Approve a PR.</td>
+                    <td>Approve the PR and add it to the merge queue</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">r-</span></td>
-                    <td>Unapprove a PR.</td>
+                    <td>Reject the PR and remove it from the merge queue</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">retry</span></td>
+                    <td>Retry the failed build</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">retry-</span></td>
+                    <td>Cancel the retry</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">try</span></td>
-                    <td>Start a try build based on the most recent commit from the main branch.</td>
+                    <td>Run the build without merging</td>
                 </tr>
                 <tr>
-                    <td><span class="command-syntax">try parent=&lt;sha&gt;</span></td>
-                    <td>Start a try build based on the specified parent commit.</td>
+                    <td><span class="command-syntax">try-</span></td>
+                    <td>Cancel the try build</td>
                 </tr>
                 <tr>
-                    <td><span class="command-syntax">try parent=last</span></td>
-                    <td>Start a try build based on the parent commit of the last try build.</td>
-                </tr>
-                <tr>
-                    <td><span class="command-syntax">try jobs=&lt;job1,job2,...&gt;</span></td>
-                    <td>Start a try build with specific CI jobs (up to 10).</td>
-                </tr>
-                <tr>
-                    <td><span class="command-syntax">try cancel</span></td>
-                    <td>Cancel a running try build.</td>
-                </tr>
-                <tr>
-                    <td><span class="command-syntax">delegate=&lt;try|review&gt;</span></td>
-                    <td>Delegate try or review permissions to the PR author.</td>
-                </tr>
-                <tr>
-                    <td><span class="command-syntax">delegate+</span></td>
-                    <td>Delegate review permissions to the PR author.</td>
+                    <td><span class="command-syntax">delegate=</span></td>
+                    <td>Delegate approval authority to another user</td>
                 </tr>
                 <tr>
                     <td><span class="command-syntax">delegate-</span></td>
-                    <td>Remove any previously granted delegation.</td>
+                    <td>Remove delegated approval authority</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">treeclosed=</span></td>
+                    <td>Close the tree to new PRs</td>
+                </tr>
+                <tr>
+                    <td><span class="command-syntax">treeclosed-</span></td>
+                    <td>Reopen the tree to new PRs</td>
                 </tr>
             </tbody>
         </table>
@@ -253,11 +311,9 @@
         <ul>
             <li><code>@bors r+ p=1</code></li>
             <li><code>@bors try parent=abcd123</code></li>
-            <li><code>@bors rollup=always</code></li>
-            <li><code>@bors delegate=review</code></li>
-            <li><code>@bors delegate=try</code></li>
             <li><code>@bors try @rust-timer queue</code>: Short-hand for compile-perf benchmarking of PRs.</li>
         </ul>
     </div>
 </body>
+
 </html>

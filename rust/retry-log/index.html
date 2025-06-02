@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bors retry log - rust</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Sans', sans-serif;
+            line-height: 1.6;
+            color: #24292f;
+            background: #fff;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem 2rem;
+            max-width: 1800px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+        }
+
+        h1 a {
+            color: #24292f;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        h1 a:hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 2000px;
+            margin: 1rem 0;
+            overflow: visible;
+            position: relative;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+            margin: 1rem 0;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #ffffff;
+        }
+
+        th {
+            background: #ffffff;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: left;
+            vertical-align: middle;
+            color: #586069;
+        }
+
+        td {
+            border-bottom: 1px solid #dee2e6;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.4;
+            color: #24292f;
+            font-weight: 400;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Source Code Pro', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .pr-title {
+            font-weight: 500;
+            color: #24292f !important;
+            text-decoration: none;
+            line-height: 1.2;
+            transition: color 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .pr-title:hover {
+            color: #28607F !important;
+            text-decoration: underline;
+        }
+
+        .time-column {
+            width: 180px;
+            white-space: nowrap;
+        }
+
+        .pr-column {
+            width: 500px;
+        }
+
+        .message-column {
+            min-width: 400px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: #24292f;
+            text-decoration: underline;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        .actions-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e1e4e8;
+        }
+
+        a {
+            color: #24292f;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        a:hover,
+        a:focus {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        /* Keep GitHub links as GitHub blue */
+        a[href^="https://github.com"]:hover,
+        a[href^="https://github.com"]:focus {
+            color: #0366d6 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Bors retry log - <a href="https://github.com/rust-lang/rust" target="_blank">rust</a></h1>
+
+    <div class="table-container">
+        <table id="results">
+            <thead>
+                <tr>
+                    <th class="time-column">Time (UTC)</th>
+                    <th class="pr-column">PR</th>
+                    <th class="message-column">Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-06-01 15:00:50</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141745" class="pr-title">#141745 Add support for
+                            custom error types in async functions</a></td>
+                    <td>
+                        <pre>@bors retry
+yield to fixing PR CI: https://github.com/rust-lang/rust/pull/141860#issuecomment-2927367549</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-06-01 14:28:37</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141851" class="pr-title">#141851 Implement RFC
+                            3521: Add `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>@bors r- retry
+Needs another patch</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-28 21:56:59</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141693" class="pr-title">#141693 Stabilize
+                            `const_mut_refs`</a></td>
+                    <td>
+                        <pre>Same thing,
+@bors retry</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-28 20:54:41</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141693" class="pr-title">#141693 Stabilize
+                            `const_mut_refs`</a></td>
+                    <td>
+                        <pre>@bors retry
+
+This is still rollup=maybe so I put it into a rollup https://github.com/rust-lang/rust/pull/141707 (the queue is pretty full)</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-28 06:01:20</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141672" class="pr-title">#141672 Add
+                            `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>@bors retry</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-28 02:42:16</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/140369" class="pr-title">#140369 Add
+                            `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>No reason for this to time out.
+
+@bors retry
+
+@jplatte these could use example doctests at some point, feel free to either add them here or in a follow up.</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-26 15:45:42</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141501" class="pr-title">#141501 Add
+                            `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>> I merged the latest changed, squashed and force-push, I don't know why the auto build of this job didn't start. Can we give it another try in the auto build if the try job works?
+
+When the build fails, bors will remove the previous approval, you have to reapprove it or do `retry`.
+
+@bors retry</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-26 10:27:21</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141392" class="pr-title">#141392 Add
+                            `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>@bors retry</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-26 08:53:40</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141442" class="pr-title">#141442 Add
+                            `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>@bors p=9 retry</pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025-05-26 08:50:44</td>
+                    <td><a href="https://github.com/rust-lang/rust/pull/141442" class="pr-title">#141442 Add
+                            `#[derive(Default)]` for enums with a single variant</a></td>
+                    <td>
+                        <pre>@bors retry</pre>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions-section">
+        <div class="nav-links">
+            <a href="/help" class="nav-link">Documentation</a>
+            <a href="/rust/queue" class="nav-link">Queue</a>
+        </div>
+    </div>
+</body>
+
+</html>

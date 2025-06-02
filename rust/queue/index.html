@@ -1,0 +1,1390 @@
+<!doctype html>
+<html>
+
+<head>
+    <style>
+        .table-container {
+            width: 100%;
+            max-width: 2000px;
+            margin: 1rem 0;
+            overflow: visible;
+            position: relative;
+        }
+
+        @keyframes barber-pole {
+
+            /* This animation is used to make the status indicator next to
+                   pending pulls look like a barber poll. We do that with a
+                   diagonal linear gradient. CSS does not allow us to animate a
+                   gradient, so instead we make the indicator a little taller
+                   than shown, and then animate the whole thing upward. */
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                /* The magic number 11.314 is sqrt(8^2 + 8^2), based on how
+                       far vertically it takes to repeat a 45 degree gradient
+                       that is 8 pixels long before it repeats. */
+                transform: translate(0, -11.314px);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Sans', sans-serif;
+            line-height: 1.6;
+            color: #24292f;
+            background: #fff;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 2rem 2rem;
+            max-width: 1800px;
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border: 1.5px solid #d0d7de;
+            border-radius: 3px;
+            background: #ffffff;
+            cursor: pointer;
+            position: relative;
+            margin: 0;
+            vertical-align: middle;
+            display: inline-block;
+            filter: drop-shadow(0 0.5px 0.5px rgba(0, 0, 0, 0.05));
+        }
+
+        input[type="checkbox"]:checked {
+            background: #28607F;
+            border-color: #28607F;
+        }
+
+        input[type="checkbox"]:checked:after {
+            content: "✓";
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input[type="checkbox"]:hover {
+            border-color: #28607F;
+        }
+
+        .header-checkbox {
+            margin: 0 auto;
+            display: block;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        code {
+            font-family: 'Source Code Pro', 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            background: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            background: #fff;
+            margin: 1rem 0;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #ffffff;
+        }
+
+        th {
+            background: #ffffff;
+            border-bottom: 1px solid rgb(225, 228, 232);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: left;
+            vertical-align: middle;
+            color: #586069;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            box-shadow: none;
+        }
+
+        th:hover {
+            background: #ffffff;
+        }
+
+        th.sorting:after,
+        th.sorting_asc:after,
+        th.sorting_desc:after {
+            content: "";
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+        }
+
+        th.sorting:after {
+            border-top: 4px solid #d0d7de;
+        }
+
+        th.sorting_asc:after {
+            border-bottom: 4px solid #28607F;
+        }
+
+        th.sorting_desc:after {
+            border-top: 4px solid #28607F;
+        }
+
+        td {
+            border-bottom: 1px solid rgb(225, 228, 232);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            text-align: left;
+            vertical-align: middle;
+            line-height: 1.2;
+            color: #24292f;
+            font-weight: 400;
+            max-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background: #ffffff;
+        }
+
+        /* Add specific max-widths for different columns */
+        td:nth-child(4) {
+            /* Title column */
+            max-width: 500px;
+        }
+
+        td:nth-child(5) {
+            /* Head ref column */
+            max-width: 200px;
+        }
+
+        td:nth-child(6),
+        /* Assignee column */
+        td:nth-child(7) {
+            /* Approved by column */
+            max-width: 120px;
+        }
+
+        td:nth-child(8) {
+            /* Priority column */
+            max-width: 70px;
+        }
+
+        td:nth-child(9) {
+            /* Rollup column */
+            max-width: 100px;
+        }
+
+        /* Allow text wrapping for specific columns if needed */
+        td.wrap-text {
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        tr.non-selectable input[type="checkbox"] {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        tr.non-selectable input[type="checkbox"]:hover {
+            border-color: #d0d7de;
+        }
+
+        tr.clickable-row {
+            cursor: pointer;
+        }
+
+        tr.clickable-row:hover td {
+            background-color: #f6f8fa !important;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        a:not(.btn):not(.status-approved):not(.status-pending):not(.status-success):not(.status-failure):not(.status-error):not(.pr-title) {
+            color: #24292f;
+            text-decoration: underline;
+        }
+
+        a:not(.btn):not(.status-approved):not(.status-pending):not(.status-success):not(.status-failure):not(.status-error):not(.pr-title):hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        .status-approved {
+            color: #22863a;
+            font-weight: 400;
+            font-size: 0.75rem;
+            text-decoration: none;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .status-approved:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background: currentColor;
+            border-radius: 50%;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        .status-approved:hover {
+            color: #22863a;
+            text-decoration: underline;
+        }
+
+        .status-pending {
+            color: #d67e00;
+            font-weight: 400;
+            font-size: 0.75rem;
+            text-decoration: none;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .status-pending:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background: currentColor;
+            border-radius: 50%;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        .status-pending:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        @keyframes ping {
+
+            75%,
+            100% {
+                transform: translateY(-50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        .status-pending:hover {
+            color: #d67e00;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .status-success {
+            color: #0366d6;
+            font-weight: 400;
+            font-size: 0.75rem;
+            text-decoration: none;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .status-success:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background: currentColor;
+            border-radius: 50%;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        .status-success:hover {
+            color: #0366d6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .status-failure,
+        .status-error {
+            color: #b31d28;
+            font-weight: 400;
+            font-size: 0.75rem;
+            text-decoration: none;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .status-failure:before,
+        .status-error:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background: currentColor;
+            border-radius: 50%;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        .status-failure:hover,
+        .status-error:hover {
+            color: #b31d28;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .mergeable-yes,
+        .mergeable-no,
+        .mergeable-empty {
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 0;
+        }
+
+        .mergeable-yes:before {
+            content: "";
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231f7a34'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        .mergeable-no:before {
+            content: "";
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b31d28'%3E%3Cpath d='M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        }
+
+        .mergeable-empty:empty:before {
+            content: "—";
+            color: #dee2e6;
+        }
+
+        .treeclosed {
+            display: none;
+        }
+
+        .pr-number {
+            font-weight: 600;
+            color: #24292f;
+            text-decoration: none;
+        }
+
+        .pr-number:hover {
+            color: #0366d6;
+            text-decoration: underline;
+        }
+
+        .pr-title {
+            font-weight: 500;
+            color: #333 !important;
+            text-decoration: none;
+            line-height: 1.2;
+            transition: color 0.2s ease;
+            font-size: 0.75rem;
+        }
+
+        .pr-title:hover {
+            color: #0366d6 !important;
+            text-decoration: underline;
+        }
+
+        .pr-meta {
+            display: none;
+        }
+
+        .wrap-text {
+            word-break: break-all;
+        }
+
+        .priority-0,
+        .priority-1,
+        .priority-2,
+        .priority-high,
+        .priority-critical {
+            font-weight: 400;
+        }
+
+        .rollup-always {
+            color: #22863a !important;
+            font-weight: 400;
+        }
+
+        .rollup-never {
+            color: #b31d28 !important;
+            font-weight: 400;
+        }
+
+        .rollup-iffy {
+            color: #d67e00 !important;
+            font-weight: 400;
+        }
+
+        .rollup-maybe {
+            color: #586069 !important;
+            font-weight: 400;
+        }
+
+        .assignee,
+        .approver {
+            color: #586069;
+            font-size: 0.75rem;
+        }
+
+        .assignee:empty:before,
+        .approver:empty:before,
+        .empty-dash:empty:before {
+            content: "—";
+            color: #dee2e6;
+        }
+
+        .sorting_asc:after,
+        .sorting_desc:after {
+            content: "";
+        }
+
+        .dataTables_filter,
+        .dataTables_info,
+        .dataTables_empty {
+            display: none;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .controls-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 0;
+        }
+
+        .controls-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-container:before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236c757d'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        #search {
+            padding: 0.35rem 0.5rem 0.35rem 2rem;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            width: 320px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            height: 32px;
+        }
+
+        #search:focus {
+            outline: none;
+            border-color: #28607F;
+            box-shadow: none;
+        }
+
+        #search::placeholder {
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        input[type="search"]::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+            appearance: none;
+            display: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.2;
+            border-radius: 6px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            height: 32px;
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn:hover:not(:disabled) svg {
+            transform: none;
+        }
+
+        .btn:hover:not(:disabled) {
+            box-shadow: none;
+        }
+
+        .btn:active:not(:disabled) {
+            box-shadow: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #28607F;
+            border: 1px solid #28607F;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #3278a0;
+            border-color: #3278a0;
+        }
+
+        .btn-outline {
+            color: #28607F;
+            background-color: #ffffff;
+            border: 1px solid #28607F;
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background-color: #f6f8fa;
+            border-color: #3278a0;
+            color: #3278a0;
+        }
+
+        .btn-outline:disabled {
+            background-color: #f6f8fa;
+            border-color: #e1e4e8;
+            color: #8b949e;
+        }
+
+        .btn-secondary {
+            color: #586069;
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #f6f8fa;
+            border-color: #d0d7de;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #c82333;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .modal-overlay.show {
+            display: block;
+        }
+
+        /* Prevent interaction with elements outside modal when it's open */
+        body.modal-open>*:not(.modal-overlay):not(#actual-rollup) {
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        #actual-rollup {
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            background: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 0;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+        }
+
+        #actual-sync {
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            background: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 0;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+        }
+
+        /* Ensure modal content is always interactive */
+        #actual-rollup *,
+        #actual-sync * {
+            pointer-events: auto;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+
+        #actual-rollup .modal-header,
+        #actual-sync .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        #actual-rollup .modal-header h2,
+        #actual-sync .modal-header h2 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2328;
+        }
+
+        #actual-rollup .modal-body,
+        #actual-sync .modal-body {
+            padding: 1.5rem;
+        }
+
+        #actual-rollup .modal-body p,
+        #actual-sync .modal-body p {
+            margin: 0 0 1rem 0;
+            line-height: 1.5;
+            color: #24292f;
+            font-size: 0.875rem;
+        }
+
+        #actual-rollup .modal-body p:last-child,
+        #actual-sync .modal-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        #actual-rollup .modal-footer,
+        #actual-sync .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        #actual-rollup a,
+        #actual-sync a {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        #actual-rollup a:hover,
+        #actual-sync a:hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        .actions-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e1e4e8;
+        }
+
+        tr.non-selectable {
+            /* Removing cursor: not-allowed as it's not needed */
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 1rem;
+            margin: 0.5rem 0 0.75rem 0;
+            padding: 0.25rem 0;
+            border: none;
+            background: none;
+            align-items: flex-end;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 80px;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: #656d76;
+            margin-bottom: 4px;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2328;
+            line-height: 1.2;
+        }
+
+        .mergeable-pending {
+            position: relative;
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            vertical-align: middle;
+        }
+
+        .mergeable-pending:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #d67e00;
+            border-radius: 50%;
+        }
+
+        .mergeable-pending:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: #d67e00;
+            border-radius: 50%;
+            animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes ping {
+
+            75%,
+            100% {
+                transform: translateY(-50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        #queue td {
+            color: #333;
+            font-weight: 400;
+            background: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-separator {
+            color: #d0d7de;
+            font-size: 0.875rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .nav-link {
+            color: #24292f;
+            text-decoration: underline;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        h1 a {
+            color: #24292f;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        h1 a:hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        #actual-rollup a {
+            color: #24292f;
+            text-decoration: underline;
+        }
+
+        #actual-rollup a:hover {
+            color: #28607F;
+            text-decoration: underline;
+        }
+
+        .pr-count {
+            font-weight: 600;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bors queue - rust</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Code+Pro:wght@400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <h1>Bors queue - <a href="https://github.com/rust-lang/rust" target="_blank">rust</a></h1>
+
+    <div class="stats-section">
+        <div class="stat-item">
+            <span class="stat-label">Total PRs</span>
+            <span class="stat-value" id="total-prs">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Approved</span>
+            <span class="stat-value" id="approved-prs">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Pending</span>
+            <span class="stat-value" id="pending-prs">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Rolled Up</span>
+            <span class="stat-value" id="rolled-up-prs">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Failed</span>
+            <span class="stat-value" id="failed-prs">0</span>
+        </div>
+    </div>
+
+    <div class="controls-section">
+        <div class="controls-left">
+            <div class="search-container">
+                <input type="search" id="search" placeholder="Search queue...">
+            </div>
+        </div>
+        <div class="controls-right">
+            <button type="button" id="expand-rollup" class="btn btn-primary" disabled>
+                Create Rollup
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="queue">
+            <thead>
+                <tr>
+                    <th class="hide">Sort key</th>
+                    <th style="width: 40px;"><input type="checkbox" class="header-checkbox"></th>
+                    <th style="width: 120px; text-align: left;">Status</th>
+                    <th style="width: 100px;">Mergeable</th>
+                    <th style="width: 500px;">Title</th>
+                    <th style="width: 200px;">Head Ref</th>
+                    <th style="width: 150px;">Assignee</th>
+                    <th style="width: 150px;">Approved By</th>
+                    <th style="width: 80px;">Priority</th>
+                    <th style="width: 120px;">Rollup</th>
+                </tr>
+            </thead>
+
+            <tbody id="queue-body">
+                <!-- Rows will be generated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div id="actual-rollup" class="hide">
+        <div class="modal-header">
+            <h2>Create Rollup</h2>
+        </div>
+        <div class="modal-body">
+            <p>You've selected <span id="checkbox-count" class="pr-count">0</span> PR(s) to be included in this rollup.
+            </p>
+            <p>A rollup is useful for shortening the queue, but jumping the queue is unfair to older PRs who have waited
+                too long.</p>
+            <p>When creating a real rollup, see <a href="https://forge.rust-lang.org/release/rollups.html"
+                    target="_blank">the instructions</a> for reference.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="cancel-rollup" class="btn btn-outline">Cancel</button>
+            <button type="button" id="rollup" class="btn btn-primary">Continue</button>
+        </div>
+    </div>
+
+    <div id="actual-sync" class="hide">
+        <div class="modal-header">
+            <h2>Synchronize Queue</h2>
+        </div>
+        <div class="modal-body">
+            <p><strong>WARNING</strong>: You should only do this if you have bors <code>r+</code> permissions on the <a
+                    href="https://github.com/rust-lang/rust" target="_blank">rust</a> repo. Please do not synchronize if
+                you do not have <code>r+</code> permissions even if you have write access to the repo, as you will be
+                unable to perform the required cleanup steps.</p>
+            <p>This is a <strong>destructive</strong> operation. If someone syncs, they need to baby-sit the queue for
+                around 45 minutes: around 30 minutes to wait for PRs to be recollected, and 15 minutes after that to
+                kick out PRs that should not be in the tree.</p>
+            <p><strong>DO NOT CLICK THIS BUTTON IF YOU ARE NOT ABLE TO HANDLE THE CLEANUP.</strong></p>
+            <p>For detailed guidelines on synchronization, please refer to <a
+                    href="https://forge.rust-lang.org/infra/docs/bors/queue-resync.html" target="_blank">Fixing
+                    inconsistencies in the bors queue</a>.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="cancel-sync" class="btn btn-outline">Cancel</button>
+            <button type="button" id="confirm-sync" class="btn btn-danger">Synchronize</button>
+        </div>
+    </div>
+
+    <div class="actions-section">
+        <div class="nav-links">
+            <a href="/help" class="nav-link">Documentation</a>
+            <a href="/rust/retry-log" class="nav-link">Retry log</a>
+        </div>
+        <div class="action-buttons">
+            <button type="button" id="synch" class="btn btn-danger">Synchronize</button>
+        </div>
+    </div>
+
+    <script src="/assets/jquery.min.js"></script>
+    <script src="/assets/jquery.dataTables.min.js"></script>
+
+    <script>
+        const OAUTH_SCOPES = [
+            "public_repo",
+            "admin:repo_hook",
+            "workflow",
+        ];
+
+        // Load real Bors queue data from extracted JSON file
+        async function loadBorsData() {
+            try {
+                console.log('Loading real Bors data...');
+                const response = await fetch('../../bors-queue-data.json');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(`Loaded ${data.length} real Bors queue entries`);
+                return data;
+            } catch (error) {
+                console.error('Failed to load Bors data:', error);
+                return [];
+            }
+        }
+
+        // Render the table rows
+        function renderTable(data) {
+            try {
+                const tbody = document.getElementById('queue-body');
+                tbody.innerHTML = '';
+
+                // Sort data by status order (pending first, then approved, etc.)
+                data.sort((a, b) => {
+                    const statusPriority = {
+                        'pending': 1,
+                        'approved': 2,
+                        '': 3,
+                        'error': 4,
+                        'failure': 5,
+                        'success': 6
+                    };
+                    const aStatus = statusPriority[a.status] || 3;
+                    const bStatus = statusPriority[b.status] || 3;
+                    if (aStatus !== bStatus) return aStatus - bStatus;
+                    return a.num - b.num; // Secondary sort by PR number
+                });
+
+                data.forEach(item => {
+                    let priorityClass = 'priority-0';
+                    if (item.priority === 1) priorityClass = 'priority-1';
+                    else if (item.priority === 2) priorityClass = 'priority-2';
+                    else if (item.priority >= 10) priorityClass = 'priority-critical';
+                    else if (item.priority >= 5) priorityClass = 'priority-high';
+
+                    const row = document.createElement('tr');
+                    if (item.rollup === 'never' || item.status === 'pending') {
+                        row.classList.add('non-selectable');
+                    } else {
+                        row.classList.add('clickable-row');
+                        row.addEventListener('click', function (e) {
+                            if (e.target.type !== 'checkbox' &&
+                                !e.target.closest('a') &&
+                                window.getSelection().toString().length === 0) {
+                                const checkbox = this.querySelector('input[type="checkbox"]');
+                                if (checkbox) {
+                                    checkbox.checked = !checkbox.checked;
+                                    checkbox.dispatchEvent(new Event('change'));
+                                }
+                            }
+                        });
+                    }
+
+                    const checkboxDisabled = item.rollup === 'never' || item.status === 'pending' ? 'disabled' : '';
+                    const checkboxChecked = item.prechecked ? 'checked' : '';
+
+                    // Status logic: blank if empty
+                    let statusContent = '';
+                    let statusClass = '';
+                    if (item.status) {
+                        statusContent = (item.status === 'pending' || item.status === 'failure' || item.status === 'success' || item.status === 'approved' ?
+                            (item.status === 'error' ?
+                                `<span class="status-error">${item.status}${item.statusExt}</span>` :
+                                `<a href="https://github.com/rust-lang/rust/actions/runs/15392348952" class="status-${item.status}" target="_blank">${item.status}${item.statusExt}</a>`)
+                            : `<span class="status-${item.status}">${item.status}${item.statusExt}</span>`);
+                    } else {
+                        statusClass = 'empty-dash';
+                    }
+
+                    // Mergeable icon logic
+                    let mergeableContent = '';
+                    let mergeableClass = '';
+                    if (item.mergeable === 'yes') {
+                        mergeableContent = '<span class="mergeable-yes"></span>';
+                    } else if (item.mergeable === 'no') {
+                        mergeableContent = '<span class="mergeable-no"></span>';
+                    } else {
+                        mergeableContent = '<span class="mergeable-empty"></span>';
+                    }
+
+                    // Priority logic: blank if zero
+                    let priorityContent = '';
+                    let priorityClassDash = '';
+                    let priorityOrder = 0;
+                    if (item.priority && item.priority !== 0) {
+                        priorityContent = item.priority;
+                        priorityOrder = item.priority;
+                    } else {
+                        priorityClassDash = 'empty-dash';
+                        priorityOrder = 0;
+                    }
+
+                    // Rollup logic: blank if empty
+                    let rollupContent = '';
+                    let rollupClass = '';
+                    if (item.rollup) {
+                        rollupContent = `<span class="rollup-${item.rollup}">${item.rollup}</span>`;
+                    } else {
+                        rollupClass = 'empty-dash';
+                    }
+
+                    const prUrl = item.htmlUrl || `https://github.com/rust-lang/rust/pull/${item.num}`;
+
+                    row.innerHTML = `
+                        <td class="hide">${item.statusOrder}</td>
+                        <td><input type="checkbox" data-num="${item.num}" ${checkboxDisabled} ${checkboxChecked}></td>
+                        <td class="${statusClass}">${statusContent}</td>
+                        <td class="${mergeableClass}">${mergeableContent}</td>
+                        <td>
+                            <a href="${prUrl}" class="pr-title" target="_blank">#${item.num} ${item.title}</a>
+                        </td>
+                        <td class="wrap-text" style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.headRef}</td>
+                        <td class="assignee">${item.assignee}</td>
+                        <td class="approver empty-dash">${item.approvedBy}</td>
+                        <td class="${priorityClassDash}" data-order="${priorityOrder}">${priorityContent}</td>
+                        <td class="${rollupClass}">${rollupContent}</td>
+                    `;
+
+                    tbody.appendChild(row);
+                });
+
+                // Table is ready
+                console.log('Table rendered successfully');
+            } catch (err) {
+                console.error('Error rendering table:', err);
+                alert('Error rendering table: ' + err);
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', async function () {
+            console.log('Page loaded, attempting to load data...');
+            const data = await loadBorsData();
+            console.log(`Rendering table with ${data.length} rows`);
+            renderTable(data);
+
+            // Update statistics
+            function updateStats() {
+                const total = data.length;
+                const approved = data.filter(item => item.status === 'approved').length;
+                const pending = data.filter(item => item.status === 'pending').length;
+                const rolledUp = data.filter(item => item.status === 'success').length;
+                const failed = data.filter(item => item.status === 'failure' || item.status === 'error').length;
+
+                document.getElementById('total-prs').textContent = total;
+                document.getElementById('approved-prs').textContent = approved;
+                document.getElementById('pending-prs').textContent = pending;
+                document.getElementById('rolled-up-prs').textContent = rolledUp;
+                document.getElementById('failed-prs').textContent = failed;
+            }
+            updateStats();
+
+            // Initialize DataTables
+            var table = $('#queue').DataTable({
+                paging: false,
+                order: [[0, 'asc']], // Default sort by status order column
+                autoWidth: false,
+                columnDefs: [
+                    { targets: [0], visible: false }, // Hide sort key column
+                    { targets: [1], orderable: false, searchable: false }, // Checkbox column
+                    { targets: [2], orderData: [0] }, // Status column uses hidden sort key for custom ordering
+                    { targets: [3], type: 'string', orderable: true }, // Mergeable column
+                    { targets: [8], type: 'num', orderable: true }, // Priority column as numeric and sortable
+                    { targets: [4, 5, 6, 7, 9], orderable: true } // Make other columns sortable
+                ],
+                drawCallback: function (settings) {
+                    var api = this.api();
+                    console.log('Table drawCallback fired. Current order:', api.order());
+                }
+            });
+
+            // Handle checkbox changes to enable/disable rollup button
+            function updateRollupButton() {
+                const checkedBoxes = document.querySelectorAll('#queue tbody input[type=checkbox]:checked');
+                document.getElementById('expand-rollup').disabled = checkedBoxes.length === 0;
+            }
+
+            // Add change event listener to all checkboxes
+            document.querySelectorAll('#queue tbody input[type=checkbox]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateRollupButton);
+            });
+
+            // Header checkbox functionality
+            document.querySelector('#queue thead input[type=checkbox]').onclick = function (ev) {
+                ev.stopPropagation();
+                const els = document.querySelectorAll('#queue tbody input[type=checkbox]:not([disabled])');
+                for (let i = 0; i < els.length; i++) {
+                    els[i].checked = this.checked;
+                }
+                updateRollupButton();
+            };
+
+            var search_el = document.getElementById('search');
+
+            search_el.oninput = function (ev) {
+                table.search(this.value).draw();
+            };
+
+            // Clear search when input is empty
+            search_el.addEventListener('input', function () {
+                if (this.value === '') {
+                    table.search('').draw();
+                }
+            });
+
+            // Rollup functionality
+            document.getElementById('expand-rollup').onclick = function () {
+                var checkboxCount = document.querySelectorAll('#queue tbody input[type=checkbox]:checked').length;
+                document.getElementById('checkbox-count').innerHTML = checkboxCount;
+                document.getElementById('actual-rollup').className = '';
+                document.getElementById('modal-overlay').className = 'modal-overlay show';
+                document.body.classList.add('modal-open');
+            };
+
+            // Close modal when clicking overlay - using mousedown for faster response
+            document.getElementById('modal-overlay').addEventListener('mousedown', function (e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Close modal when pressing Escape key
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && !document.getElementById('actual-rollup').classList.contains('hide')) {
+                    closeModal();
+                }
+            });
+
+            document.getElementById('cancel-rollup').onclick = function () {
+                closeModal();
+            };
+
+            document.getElementById('rollup').onclick = function (ev) {
+                var nums = [];
+                var els = document.querySelectorAll('#queue tbody input[type=checkbox]:checked');
+                for (var i = 0; i < els.length; i++) {
+                    var num = parseInt(els[i].getAttribute('data-num'));
+                    nums.push(num);
+                }
+
+                location = 'https://github.com/login/oauth/authorize' +
+                    '?client_id=oauth_client_id_placeholder' +
+                    '&scope=' + OAUTH_SCOPES.join(',') +
+                    '&state=' + encodeURIComponent(JSON.stringify({
+                        cmd: 'rollup',
+                        repo_label: 'rust-lang/rust',
+                        nums: nums,
+                    }));
+            };
+
+            document.getElementById('synch').onclick = function (ev) {
+                document.getElementById('actual-sync').className = '';
+                document.getElementById('modal-overlay').className = 'modal-overlay show';
+                document.body.classList.add('modal-open');
+            };
+
+            document.getElementById('cancel-sync').onclick = function () {
+                closeModal();
+            };
+
+            document.getElementById('confirm-sync').onclick = function () {
+                location = 'https://github.com/login/oauth/authorize' +
+                    '?client_id=oauth_client_id_placeholder' +
+                    '&scope=' + OAUTH_SCOPES.join(',') +
+                    '&state=' + encodeURIComponent(JSON.stringify({
+                        cmd: 'synch',
+                        repo_label: 'rust-lang/rust',
+                    }));
+            };
+
+            // Function to close modal
+            function closeModal() {
+                document.getElementById('actual-rollup').className = 'hide';
+                document.getElementById('actual-sync').className = 'hide';
+                document.getElementById('modal-overlay').className = 'modal-overlay';
+                document.body.classList.remove('modal-open');
+            }
+
+            // Show table after DataTables is initialized
+            document.querySelector('.table-container').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
