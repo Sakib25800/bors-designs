@@ -518,28 +518,28 @@
         }
 
         .pr-number {
-            font-weight: 600;
-            color: #24292f;
-            text-decoration: none;
+            font-weight: 500;
+            color: #0366d6 !important;
+            text-decoration: none !important;
+            font-size: 0.75rem;
         }
 
         .pr-number:hover {
-            color: #0366d6;
-            text-decoration: underline;
+            color: #0366d6 !important;
+            text-decoration: underline !important;
         }
 
         .pr-title {
             font-weight: 500;
-            color: #333 !important;
-            text-decoration: none;
+            color: #24292f;
             line-height: 1.2;
-            transition: color 0.2s ease;
             font-size: 0.75rem;
+            text-decoration: none !important;
         }
 
         .pr-title:hover {
-            color: #0366d6 !important;
-            text-decoration: underline;
+            color: #24292f !important;
+            text-decoration: none !important;
         }
 
         .pr-meta {
@@ -1285,9 +1285,10 @@
                 <tr>
                     <th class="hide">Sort key</th>
                     <th style="width: 40px;"><input type="checkbox" class="header-checkbox"></th>
+                    <th style="width: 100px;">#</th>
                     <th style="width: 120px; text-align: left;">Status</th>
                     <th style="width: 100px;">Mergeable</th>
-                    <th style="width: 500px;">Title</th>
+                    <th style="width: 400px;">Title</th>
                     <th style="width: 200px;">Head Ref</th>
                     <th style="width: 150px;">Assignee</th>
                     <th style="width: 150px;">Approved By</th>
@@ -1485,11 +1486,10 @@
                     row.innerHTML = `
                         <td class="hide">${item.statusOrder}</td>
                         <td><input type="checkbox" data-num="${item.num}" ${checkboxDisabled} ${checkboxChecked}></td>
+                        <td><a href="${prUrl}" class="pr-number" target="_blank">${item.num}</a></td>
                         <td class="${statusClass}">${statusContent}</td>
                         <td class="${mergeableClass}">${mergeableContent}</td>
-                        <td>
-                            <a href="${prUrl}" class="pr-title" target="_blank">#${item.num} ${item.title}</a>
-                        </td>
+                        <td class="pr-title">${item.title}</td>
                         <td class="wrap-text" style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.headRef}</td>
                         <td class="assignee">${item.assignee}</td>
                         <td class="approver empty-dash">${item.approvedBy}</td>
@@ -1539,10 +1539,12 @@
                 columnDefs: [
                     { targets: [0], visible: false }, // Hide sort key column
                     { targets: [1], orderable: false, searchable: false }, // Checkbox column
-                    { targets: [2], orderData: [0] }, // Status column uses hidden sort key for custom ordering
-                    { targets: [3], type: 'string', orderable: true }, // Mergeable column
+                    { targets: [2], type: 'string', orderable: true }, // PR number column
+                    { targets: [3], orderData: [0] }, // Status column uses hidden sort key for custom ordering
+                    { targets: [4], type: 'string', orderable: true }, // Mergeable column
+                    { targets: [5], type: 'string', orderable: true }, // Title column
                     { targets: [8], type: 'num', orderable: true }, // Priority column as numeric and sortable
-                    { targets: [4, 5, 6, 7, 9], orderable: true } // Make other columns sortable
+                    { targets: [5, 6, 7, 9], orderable: true } // Make other columns sortable
                 ],
                 drawCallback: function (settings) {
                     var api = this.api();

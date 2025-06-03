@@ -150,7 +150,7 @@
     "statusExt": "",
     "statusOrder": 2,
     "mergeable": "yes",
-    "title": "Improve diagnostics for usage of qualified paths within tuple struct exprs/pats",
+    "title": "Improve diagnostics for usage of qualified paths",
     "headRef": "WaffleLapkin:unqualified",
     "assignee": "jdonszelmann",
     "approvedBy": "jdonszelmann",
