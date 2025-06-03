@@ -494,34 +494,18 @@
         .mergeable-no,
         .mergeable-empty {
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 400;
             display: inline-flex;
             align-items: center;
             padding: 2px 0;
         }
 
-        .mergeable-yes:before {
-            content: "";
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            margin-right: 6px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231f7a34'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0z'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        .mergeable-yes {
+            color: #22863a;
         }
 
-        .mergeable-no:before {
-            content: "";
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            margin-right: 6px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b31d28'%3E%3Cpath d='M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06z'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+        .mergeable-no {
+            color: #b31d28;
         }
 
         .mergeable-empty:empty:before {
@@ -1468,9 +1452,9 @@
                     let mergeableContent = '';
                     let mergeableClass = '';
                     if (item.mergeable === 'yes') {
-                        mergeableContent = '<span class="mergeable-yes"></span>';
+                        mergeableContent = '<span class="mergeable-yes">Yes</span>';
                     } else if (item.mergeable === 'no') {
-                        mergeableContent = '<span class="mergeable-no"></span>';
+                        mergeableContent = '<span class="mergeable-no">No</span>';
                     } else {
                         mergeableContent = '<span class="mergeable-empty"></span>';
                     }
