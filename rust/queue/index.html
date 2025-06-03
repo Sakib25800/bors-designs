@@ -9,6 +9,8 @@
             margin: 1rem 0;
             overflow: visible;
             position: relative;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         @keyframes barber-pole {
@@ -136,18 +138,30 @@
         }
 
         table {
+            min-width: 1000px;
+            width: auto;
             border-collapse: separate;
             border-spacing: 0;
-            width: 100%;
             background: #fff;
             margin: 1rem 0;
+            display: table;
         }
 
         thead {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            background: #ffffff;
+            display: table-header-group;
+        }
+
+        tbody {
+            display: table-row-group;
+        }
+
+        tr {
+            display: table-row;
+        }
+
+        th,
+        td {
+            display: table-cell;
         }
 
         th {
@@ -213,6 +227,68 @@
         }
 
         /* Add specific max-widths for different columns */
+        td:nth-child(3) {
+            /* Status column */
+            max-width: none;
+            white-space: normal;
+            min-width: 120px;
+            padding-right: 1rem;
+            overflow: visible;
+            text-overflow: unset;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+                width: 100%;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 1000px;
+                width: auto;
+                border-collapse: separate;
+                border-spacing: 0;
+                background: #fff;
+                margin: 1rem 0;
+                display: table;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tbody {
+                display: table-row-group;
+            }
+
+            tr {
+                display: table-row;
+            }
+
+            th,
+            td {
+                display: table-cell;
+            }
+
+            th,
+            td {
+                white-space: normal;
+                overflow: visible;
+                text-overflow: unset;
+                max-width: none;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            td:nth-child(6) {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 120px;
+            }
+        }
+
         td:nth-child(4) {
             /* Title column */
             max-width: 500px;
@@ -905,15 +981,68 @@
             width: 100%;
             margin: 1rem 0;
             position: relative;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             min-width: 1000px;
-            width: 100%;
+            width: auto;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
             margin: 1rem 0;
+            display: table;
+        }
+
+        th,
+        td {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+        }
+
+        /* Only Head Ref column should be ellipsed */
+        td:nth-child(6) {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+                width: 100%;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 1000px;
+                width: auto;
+                border-collapse: separate;
+                border-spacing: 0;
+                background: #fff;
+                margin: 1rem 0;
+                display: table;
+            }
+
+            th,
+            td {
+                white-space: normal;
+                overflow: visible;
+                text-overflow: unset;
+                max-width: none;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            td:nth-child(6) {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 120px;
+            }
         }
 
         /* Responsive controls section */
