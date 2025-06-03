@@ -645,6 +645,7 @@
 
         .search-container {
             position: relative;
+            width: 100%;
         }
 
         .search-container:before {
@@ -1086,6 +1087,17 @@
         #search {
             width: 100%;
             max-width: 320px;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                width: 100%;
+            }
+
+            #search {
+                width: 100%;
+                max-width: none;
+            }
         }
 
         /* Responsive stats section */
