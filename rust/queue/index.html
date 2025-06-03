@@ -1551,7 +1551,7 @@
                     row.innerHTML = `
                         <td class="hide">${item.statusOrder}</td>
                         <td><input type="checkbox" data-num="${item.num}" ${checkboxDisabled} ${checkboxChecked}></td>
-                        <td><a href="${prUrl}" class="pr-number" target="_blank">#${item.num}</a></td>
+                        <td><a href="${prUrl}" class="pr-number" target="_blank">${item.num}</a></td>
                         <td class="${statusClass}">${statusContent}</td>
                         <td class="${mergeableClass}">${mergeableContent}</td>
                         <td class="pr-title">${item.title}</td>
