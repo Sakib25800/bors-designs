@@ -531,14 +531,14 @@
 
         .pr-title {
             font-weight: 500;
-            color: #24292f;
+            color: #3f444c;
             line-height: 1.2;
             font-size: 0.75rem;
             text-decoration: none !important;
         }
 
         .pr-title:hover {
-            color: #24292f !important;
+            color: #3f444c !important;
             text-decoration: none !important;
         }
 
@@ -1453,9 +1453,9 @@
                     let mergeableContent = '';
                     let mergeableClass = '';
                     if (item.mergeable === 'yes') {
-                        mergeableContent = '<span class="mergeable-yes">Yes</span>';
+                        mergeableContent = '<span class="mergeable-yes">yes</span>';
                     } else if (item.mergeable === 'no') {
-                        mergeableContent = '<span class="mergeable-no">No</span>';
+                        mergeableContent = '<span class="mergeable-no">no</span>';
                     } else {
                         mergeableContent = '<span class="mergeable-empty"></span>';
                     }
@@ -1486,7 +1486,7 @@
                     row.innerHTML = `
                         <td class="hide">${item.statusOrder}</td>
                         <td><input type="checkbox" data-num="${item.num}" ${checkboxDisabled} ${checkboxChecked}></td>
-                        <td><a href="${prUrl}" class="pr-number" target="_blank">${item.num}</a></td>
+                        <td><a href="${prUrl}" class="pr-number" target="_blank">#${item.num}</a></td>
                         <td class="${statusClass}">${statusContent}</td>
                         <td class="${mergeableClass}">${mergeableContent}</td>
                         <td class="pr-title">${item.title}</td>
