@@ -5,7 +5,7 @@
     <style>
         .table-container {
             width: 100%;
-            max-width: 2000px;
+            max-width: 1800px;
             margin: 1rem 0;
             overflow: visible;
             position: relative;
@@ -139,7 +139,7 @@
 
         table {
             min-width: 1000px;
-            width: auto;
+            width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
@@ -176,9 +176,70 @@
             cursor: pointer;
             user-select: none;
             position: relative;
-            box-shadow: none;
             white-space: nowrap;
         }
+
+        /* Column widths */
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 40px;
+        }
+
+        /* Checkbox */
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 80px;
+        }
+
+        /* PR number */
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 120px;
+        }
+
+        /* Status */
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 100px;
+        }
+
+        /* Mergeable */
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 30%;
+        }
+
+        /* Title */
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 15%;
+        }
+
+        /* Head Ref */
+        th:nth-child(7),
+        td:nth-child(7) {
+            width: 120px;
+        }
+
+        /* Assignee */
+        th:nth-child(8),
+        td:nth-child(8) {
+            width: 120px;
+        }
+
+        /* Approved By */
+        th:nth-child(9),
+        td:nth-child(9) {
+            width: 80px;
+        }
+
+        /* Priority */
+        th:nth-child(10),
+        td:nth-child(10) {
+            width: 100px;
+        }
+
+        /* Rollup */
 
         th:hover {
             background: #ffffff;
@@ -219,11 +280,24 @@
             line-height: 1.2;
             color: #586069;
             font-weight: 400;
-            max-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
             white-space: nowrap;
             background: #ffffff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Allow text wrapping for specific columns */
+        td:nth-child(5) {
+            /* Title column */
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        td:nth-child(6) {
+            /* Head Ref column */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* Add specific max-widths for different columns */
@@ -246,7 +320,7 @@
 
             table {
                 min-width: 1000px;
-                width: auto;
+                width: 100%;
                 border-collapse: separate;
                 border-spacing: 0;
                 background: #fff;
@@ -603,6 +677,7 @@
             align-items: center;
             margin: 1rem 0;
             padding: 0;
+            max-width: 1800px;
         }
 
         .controls-left {
@@ -962,7 +1037,7 @@
 
         table {
             min-width: 1000px;
-            width: auto;
+            width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
@@ -994,7 +1069,7 @@
 
             table {
                 min-width: 1000px;
-                width: auto;
+                width: 100%;
                 border-collapse: separate;
                 border-spacing: 0;
                 background: #fff;
