@@ -1198,15 +1198,17 @@
         /* Status cell vertical strip indicator */
         .status {
             position: relative;
-            padding-left: 16px !important;
+            padding-left: 12px !important; /* 6px strip + 6px gap */
             white-space: nowrap;
-            vertical-align: middle;
-            /* Remove color inheritance from old status classes */
+            vertical-align: middle !important;
             color: #24292f;
             font-weight: 400;
             font-size: 0.75rem;
+            /* Remove extra vertical padding */
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            line-height: 1.2;
         }
-
         .status:before {
             content: "";
             position: absolute;
@@ -1214,62 +1216,41 @@
             top: 0;
             bottom: 0;
             width: 6px;
-            /* border-radius: 2px; */
-            /* Remove rounded edges */
             background: #eee;
-            /* Default, will be overridden by status type */
+            /* No border-radius, no margin, flush with cell */
         }
-
+        .status.pending {
+            color: #d67e00;
+        }
         .status.pending:before {
             background-color: #F0DE57;
             background-image: repeating-linear-gradient(135deg, #F0DE57 0, #F0DE57 4px, #FBEE97 4px, #FBEE97 8px, #F0DE57 0);
             background-size: 8px 8px;
             animation: barber-pole 1s linear infinite;
         }
-
-        @keyframes barber-pole {
-            from {
-                background-position: 0 0;
-            }
-
-            to {
-                background-position: 0 -11.314px;
-            }
+        .status.approved {
+            color: #22863a;
         }
-
         .status.approved:before {
             background: #85DB7B;
         }
-
+        .status.success {
+            color: #0366d6;
+        }
         .status.success:before {
             background: #80C0F0;
         }
-
+        .status.failure,
+        .status.error {
+            color: #b31d28;
+        }
         .status.failure:before,
         .status.error:before {
             background: #F08080;
         }
-
-        /* Remove old dot status indicator and padding */
-        .status-approved,
-        .status-pending,
-        .status-success,
-        .status-failure,
-        .status-error {
-            color: inherit !important;
-            font-size: inherit !important;
-            font-weight: inherit !important;
-            text-decoration: none !important;
-            position: static !important;
-            padding-left: 0 !important;
-        }
-
-        .status-approved:before,
-        .status-pending:before,
-        .status-success:before,
-        .status-failure:before,
-        .status-error:before {
-            display: none !important;
+        /* Add a small left margin to the text for separation from the strip */
+        .status {
+            /* Use a span for the text if needed, or just rely on padding */
         }
     </style>
     <meta charset="utf-8">
