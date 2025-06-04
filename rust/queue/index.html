@@ -1235,11 +1235,11 @@
         }
 
         /* Add alternating row colors with higher specificity */
-        #queue tbody tr:nth-child(even) td {
+        #queue tbody tr:nth-child(even):not(.group-header) td {
             background-color: #f8f9fa !important;
         }
 
-        #queue tbody tr:nth-child(odd) td {
+        #queue tbody tr:nth-child(odd):not(.group-header) td {
             background-color: #ffffff !important;
         }
 
@@ -1327,6 +1327,78 @@
         #queue .status a:hover {
             text-decoration: underline;
         }
+
+        .group-container {
+            position: relative;
+            min-width: 160px;
+        }
+
+        .group-select {
+            padding: 0.35rem 2rem 0.35rem 0.75rem;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            width: 100%;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            height: 32px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            cursor: pointer;
+        }
+
+        .group-select:focus {
+            outline: none;
+            border-color: #28607F;
+            box-shadow: none;
+        }
+
+        .group-select:hover {
+            border-color: #28607F;
+        }
+
+        /* Group header styles */
+        .group-header {
+            background-color: #f6f8fa;
+            font-weight: 500;
+            color: #24292f;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #e1e4e8;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .group-header td {
+            padding: 0.5rem 0.75rem !important;
+            background-color: #f6f8fa !important;
+            border-bottom: 1px solid #e1e4e8 !important;
+        }
+
+        .group-header:hover td {
+            background-color: #f0f2f4 !important;
+        }
+
+        .group-header .group-count {
+            color: #586069;
+            font-weight: normal;
+            margin-left: 0.5rem;
+        }
+
+        .group-header .group-toggle {
+            float: right;
+            color: #586069;
+        }
+
+        .group-content {
+            display: none;
+        }
+
+        .group-content.expanded {
+            display: table-row-group;
+        }
     </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1344,6 +1416,17 @@
             <div class="controls-row">
                 <div class="search-container">
                     <input type="search" id="search" placeholder="Search queue...">
+                </div>
+                <div class="group-container">
+                    <select id="group-by" class="group-select">
+                        <option value="">No Grouping</option>
+                        <option value="status">Group by Status</option>
+                        <option value="mergeable">Group by Mergeable</option>
+                        <option value="assignee">Group by Assignee</option>
+                        <option value="approvedBy">Group by Approved By</option>
+                        <option value="priority">Group by Priority</option>
+                        <option value="rollup">Group by Rollup</option>
+                    </select>
                 </div>
                 <button type="button" id="expand-rollup" class="btn btn-primary" disabled>
                     Create Rollup
@@ -1621,6 +1704,153 @@
                     var api = this.api();
                     console.log('Table drawCallback fired. Current order:', api.order());
                 }
+            });
+
+            // Grouping functionality
+            function groupTable(groupBy) {
+                console.log('Starting groupTable with groupBy:', groupBy);
+
+                // Clear existing groups
+                $('.group-header, .group-content').remove();
+
+                if (!groupBy) {
+                    // If no grouping, just show all rows
+                    $('#queue tbody tr').show();
+                    return;
+                }
+
+                // Get all rows
+                const rows = $('#queue tbody tr').toArray();
+                console.log('Total rows found:', rows.length);
+                const groups = {};
+
+                // Group rows
+                rows.forEach((row, index) => {
+                    let groupValue;
+                    switch (groupBy) {
+                        case 'status':
+                            // Get the status from the status column's text content
+                            const statusCell = $(row).find('td:nth-child(3)'); // Changed from 4 to 3
+                            console.log(`Row ${index} status cell HTML:`, statusCell.html());
+
+                            const statusText = statusCell.find('a').text().trim();
+                            console.log(`Row ${index} status text:`, statusText);
+
+                            if (statusText) {
+                                groupValue = statusText.charAt(0).toUpperCase() + statusText.slice(1);
+                            } else {
+                                groupValue = 'No Status';
+                            }
+                            console.log(`Row ${index} final groupValue:`, groupValue);
+                            break;
+                        case 'mergeable':
+                            groupValue = $(row).find('td:nth-child(4)').text().trim() || 'Unknown';
+                            break;
+                        case 'assignee':
+                            groupValue = $(row).find('td:nth-child(8)').text().trim() || 'Unassigned';
+                            break;
+                        case 'approvedBy':
+                            groupValue = $(row).find('td:nth-child(9)').text().trim() || 'Not Approved';
+                            break;
+                        case 'priority':
+                            groupValue = $(row).find('td:nth-child(10)').text().trim() || 'No Priority';
+                            break;
+                        case 'rollup':
+                            groupValue = $(row).find('td:nth-child(11)').text().trim() || 'No Rollup';
+                            break;
+                    }
+
+                    if (!groups[groupValue]) {
+                        groups[groupValue] = [];
+                    }
+                    groups[groupValue].push(row);
+                });
+
+                console.log('Groups created:', Object.keys(groups));
+                console.log('Group counts:', Object.entries(groups).map(([key, value]) => `${key}: ${value.length}`));
+
+                // Sort groups
+                const sortedGroups = Object.entries(groups).sort((a, b) => {
+                    // Special sorting for status
+                    if (groupBy === 'status') {
+                        const statusOrder = {
+                            'Pending': 1,
+                            'Approved': 2,
+                            'Success': 3,
+                            'Error': 4,
+                            'Failure': 5,
+                            'No Status': 999 // Put No Status last
+                        };
+                        return (statusOrder[a[0]] || 99) - (statusOrder[b[0]] || 99);
+                    }
+                    // Special sorting for priority
+                    if (groupBy === 'priority') {
+                        const aVal = a[0] === 'No Priority' ? -1 : parseInt(a[0]) || 0;
+                        const bVal = b[0] === 'No Priority' ? -1 : parseInt(b[0]) || 0;
+                        if (aVal === -1) return 1; // Put No Priority last
+                        if (bVal === -1) return -1;
+                        return bVal - aVal; // Higher priority first
+                    }
+
+                    // For all other groupings, put empty/no-value groups last
+                    const emptyValues = ['No Status', 'Unknown', 'Unassigned', 'Not Approved', 'No Priority', 'No Rollup', ''];
+                    const aIsEmpty = emptyValues.includes(a[0]);
+                    const bIsEmpty = emptyValues.includes(b[0]);
+
+                    if (aIsEmpty && !bIsEmpty) return 1;
+                    if (!aIsEmpty && bIsEmpty) return -1;
+                    if (aIsEmpty && bIsEmpty) return a[0].localeCompare(b[0]);
+
+                    // Default string comparison for non-empty values
+                    return a[0].localeCompare(b[0]);
+                });
+
+                console.log('Sorted groups:', sortedGroups.map(([key]) => key));
+
+                // Create group headers and content
+                const tbody = $('#queue tbody');
+                tbody.empty();
+
+                sortedGroups.forEach(([groupName, groupRows]) => {
+                    // Create group header
+                    const headerRow = $('<tr class="group-header">')
+                        .html(`
+                            <td colspan="11">
+                                ${groupName}
+                                <span class="group-count">(${groupRows.length})</span>
+                                <span class="group-toggle">▼</span>
+                            </td>
+                        `);
+
+                    // Add group header to table
+                    tbody.append(headerRow);
+
+                    // Add rows to table
+                    groupRows.forEach(row => {
+                        tbody.append(row);
+                    });
+                });
+
+                // Add click handlers for group headers
+                $('.group-header').on('click', function () {
+                    const $header = $(this);
+                    const $rows = $header.nextUntil('.group-header');
+                    const $toggle = $header.find('.group-toggle');
+
+                    if ($rows.is(':visible')) {
+                        $rows.hide();
+                        $toggle.text('▶');
+                    } else {
+                        $rows.show();
+                        $toggle.text('▼');
+                    }
+                });
+            }
+
+            // Handle group by select change
+            $('#group-by').on('change', function () {
+                console.log('Group by changed to:', this.value);
+                groupTable(this.value);
             });
 
             // Handle checkbox changes to enable/disable rollup button
