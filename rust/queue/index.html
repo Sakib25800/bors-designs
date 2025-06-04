@@ -188,18 +188,32 @@
         th:nth-child(1),
         td:nth-child(1) {
             width: 40px;
+            position: sticky;
+            left: 0;
+            background: #ffffff;
+            z-index: 2;
         }
 
         /* Checkbox */
         th:nth-child(2),
         td:nth-child(2) {
             width: 80px;
+            position: sticky;
+            left: 40px;
+            background: #ffffff;
+            z-index: 2;
         }
 
         /* PR number */
         th:nth-child(3),
         td:nth-child(3) {
             width: 120px;
+        }
+
+        /* Add shadow only when table is being scrolled */
+        .table-container.is-scrolling th:nth-child(2),
+        .table-container.is-scrolling td:nth-child(2) {
+            box-shadow: 2px 0 2px -1px rgba(0, 0, 0, 0.05);
         }
 
         /* Status */
@@ -1134,6 +1148,12 @@
             margin: 0 auto;
             padding: 0;
         }
+
+        /* Ensure sticky columns maintain header line */
+        th:nth-child(1),
+        th:nth-child(2) {
+            box-shadow: 0 1px 0 0 rgb(225, 228, 232);
+        }
     </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1547,6 +1567,19 @@
 
             // Show table after DataTables is initialized
             document.querySelector('.table-container').style.display = 'block';
+
+            // Add scroll detection for sticky columns
+            const tableContainer = document.querySelector('.table-container');
+            let scrollTimeout;
+
+            tableContainer.addEventListener('scroll', function () {
+                clearTimeout(scrollTimeout);
+                tableContainer.classList.add('is-scrolling');
+
+                scrollTimeout = setTimeout(function () {
+                    tableContainer.classList.remove('is-scrolling');
+                }, 150);
+            });
         });
     </script>
 </body>
