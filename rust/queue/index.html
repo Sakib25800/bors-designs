@@ -653,7 +653,7 @@
         .priority-2,
         .priority-high,
         .priority-critical {
-            font-weight: 400;
+            font-weight: 500;
             color: #586069;
         }
 
@@ -1438,7 +1438,7 @@
                         <td class="wrap-text" style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.headRef}</td>
                         <td class="assignee">${item.assignee}</td>
                         <td class="approver empty-dash">${item.approvedBy}</td>
-                        <td class="${priorityClassDash}" data-order="${priorityOrder}">${priorityContent}</td>
+                        <td class="${priorityClass} ${priorityClassDash}" data-order="${priorityOrder}">${priorityContent}</td>
                         <td class="${rollupClass}">${rollupContent}</td>
                     `;
 
