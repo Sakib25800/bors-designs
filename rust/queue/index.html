@@ -11,7 +11,7 @@
             position: relative;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 0 0.75rem;
+            padding: 0;
         }
 
         @keyframes barber-pole {
@@ -150,6 +150,10 @@
 
         thead {
             display: table-header-group;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #ffffff;
         }
 
         tbody {
@@ -167,7 +171,6 @@
 
         th {
             background: #ffffff;
-            border-bottom: 1px solid rgb(225, 228, 232);
             padding: 0.5rem 1.5rem 0.5rem 0.75rem;
             font-size: 0.75rem;
             font-weight: 500;
@@ -178,6 +181,7 @@
             user-select: none;
             position: relative;
             white-space: nowrap;
+            box-shadow: 0 1px 0 0 rgb(225, 228, 232);
         }
 
         /* Column widths */
@@ -1074,12 +1078,11 @@
 
         .table-container {
             width: 100%;
+            max-width: 1800px;
+            margin: 0;
             overflow: visible;
             position: relative;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             padding: 0;
-            margin: 0;
         }
 
         @media (min-width: 768px) {
@@ -1128,6 +1131,7 @@
             width: 100%;
             max-width: 1800px;
             margin: 0 auto;
+            padding: 0 0.75rem;
         }
     </style>
     <meta charset="utf-8">
