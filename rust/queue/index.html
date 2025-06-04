@@ -16,11 +16,11 @@
 
         @keyframes barber-pole {
             from {
-                background-position: 0 0;
+                transform: translate(0, 0);
             }
 
             to {
-                background-position: 0 -11.314px;
+                transform: translate(0, -11.314px);
             }
         }
 
@@ -485,17 +485,10 @@
         }
 
         .status-pending:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 7px;
-            height: 7px;
-            background: currentColor;
-            border-radius: 50%;
-            animation: fade 1.5s ease-in-out infinite;
-            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+            bottom: -20px;
+            background-color: #F0DE57;
+            background-image: repeating-linear-gradient(135deg, #F0DE57 0, #F0DE57 4px, #FBEE97 4px, #FBEE97 8px, #F0DE57 0);
+            animation: barber-pole 1s linear infinite;
         }
 
         @keyframes fade {
@@ -1227,9 +1220,9 @@
         }
 
         .status.pending:before {
+            bottom: -20px;
             background-color: #F0DE57;
             background-image: repeating-linear-gradient(135deg, #F0DE57 0, #F0DE57 4px, #FBEE97 4px, #FBEE97 8px, #F0DE57 0);
-            background-size: 8px 8px;
             animation: barber-pole 1s linear infinite;
         }
 
