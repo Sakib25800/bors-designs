@@ -313,54 +313,37 @@
         }
 
         @media (max-width: 768px) {
-            .table-container {
-                overflow-x: auto;
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                margin-bottom: 1.25rem;
                 width: 100%;
-                -webkit-overflow-scrolling: touch;
             }
 
-            table {
-                min-width: 1000px;
-                width: 100%;
-                border-collapse: separate;
-                border-spacing: 0;
-                background: #fff;
-                margin: 1rem 0;
-                display: table;
-            }
-
-            thead {
-                display: table-header-group;
-            }
-
-            tbody {
-                display: table-row-group;
-            }
-
-            tr {
-                display: table-row;
-            }
-
-            th,
-            td {
-                display: table-cell;
-            }
-
-            th,
-            td {
-                white-space: normal;
-                overflow: visible;
-                text-overflow: unset;
+            .search-container {
                 max-width: none;
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
+                width: 100%;
             }
 
-            td:nth-child(6) {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 120px;
+            #search {
+                width: 100%;
+            }
+
+            .stats-section {
+                flex-wrap: wrap;
+                gap: 1.25rem;
+                padding: 0.75rem 0;
+                margin-bottom: 0.75rem;
+            }
+
+            .stat-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .table-container {
+                margin-top: 0;
+                padding-top: 0;
             }
         }
 
@@ -1118,12 +1101,17 @@
             .stats-section {
                 flex-wrap: wrap;
                 gap: 1.25rem;
-                padding: 1rem 0;
-                margin-bottom: 1.25rem;
+                padding: 0.75rem 0;
+                margin-bottom: 0.75rem;
             }
 
             .stat-item:not(:last-child)::after {
                 display: none;
+            }
+
+            .table-container {
+                margin-top: 0;
+                padding-top: 0;
             }
         }
 
