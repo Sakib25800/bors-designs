@@ -1362,18 +1362,19 @@
 
         /* Group header styles */
         .group-header {
-            background-color: #f6f8fa;
+            background-color: #f0f2f4;
             font-weight: 500;
             color: #24292f;
             padding: 0.5rem 0.75rem;
             border-bottom: 1px solid #e1e4e8;
             cursor: pointer;
             user-select: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .group-header td {
             padding: 0.625rem 0.75rem !important;
-            background-color: #f6f8fa !important;
+            background-color: #f0f2f4 !important;
             border-bottom: 1px solid #e1e4e8 !important;
             font-weight: 600 !important;
             color: #24292f !important;
@@ -1383,7 +1384,7 @@
         }
 
         .group-header:hover td {
-            background-color: #f0f2f4 !important;
+            background-color: #e8eaed !important;
         }
 
         .group-header .group-count {
@@ -1391,14 +1392,20 @@
             font-weight: normal;
             margin-left: 0.5rem;
             font-size: 0.8125rem;
+            opacity: 0.8;
         }
 
         .group-header .group-toggle {
             float: right;
             color: #586069;
-            font-size: 0.75rem;
+            font-size: 0.6875rem;
             margin-left: 0.5rem;
-            opacity: 0.8;
+            opacity: 0.7;
+            transition: transform 0.2s ease;
+        }
+
+        .group-header:hover .group-toggle {
+            opacity: 0.9;
         }
 
         .group-content {
