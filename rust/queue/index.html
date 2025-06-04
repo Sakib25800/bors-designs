@@ -182,6 +182,15 @@
             position: relative;
             white-space: nowrap;
             box-shadow: 0 1px 0 0 rgb(225, 228, 232);
+            -webkit-text-size-adjust: 100%;
+            /* Prevent iOS font size adjustment */
+        }
+
+        /* Ensure consistent font size for all headers */
+        th:nth-child(5),
+        th:nth-child(6) {
+            font-size: 0.75rem !important;
+            -webkit-text-size-adjust: 100%;
         }
 
         /* Column widths */
@@ -204,13 +213,10 @@
             z-index: 2;
         }
 
-        /* Add border only on mobile */
-        @media (max-width: 768px) {
-
-            th:nth-child(2),
-            td:nth-child(2) {
-                border-right: 1px solid rgba(0, 0, 0, 0.1);
-            }
+        /* Add border when horizontal scrolling is possible */
+        .table-container.has-horizontal-scroll th:nth-child(2),
+        .table-container.has-horizontal-scroll td:nth-child(2) {
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         /* PR number */
@@ -313,6 +319,10 @@
             /* Title column */
             white-space: normal;
             word-break: break-word;
+            font-size: 0.75rem !important;
+            /* Force consistent font size */
+            -webkit-text-size-adjust: 100%;
+            /* Prevent iOS font size adjustment */
         }
 
         td:nth-child(6) {
@@ -320,6 +330,10 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 0.75rem !important;
+            /* Force consistent font size */
+            -webkit-text-size-adjust: 100%;
+            /* Prevent iOS font size adjustment */
         }
 
         /* Add specific max-widths for different columns */
@@ -359,7 +373,18 @@
                 row-gap: 0.5rem;
             }
 
+            .stat-item {
+                position: relative;
+                padding-right: 1.25rem;
+            }
+
             .stat-item:not(:last-child)::after {
+                right: 0.5rem;
+                height: 1rem;
+            }
+
+            /* Hide divider after pending stat */
+            .stat-item:nth-child(3)::after {
                 display: none;
             }
 
@@ -1135,7 +1160,18 @@
                 row-gap: 0.5rem;
             }
 
+            .stat-item {
+                position: relative;
+                padding-right: 1.25rem;
+            }
+
             .stat-item:not(:last-child)::after {
+                right: 0.5rem;
+                height: 1rem;
+            }
+
+            /* Hide divider after pending stat */
+            .stat-item:nth-child(3)::after {
                 display: none;
             }
 
@@ -1583,6 +1619,17 @@
                     tableContainer.classList.remove('is-scrolling');
                 }, 150);
             });
+
+            // Check for horizontal scroll
+            function checkForHorizontalScroll() {
+                const container = document.querySelector('.table-container');
+                const hasScroll = container.scrollWidth > container.clientWidth;
+                container.classList.toggle('has-horizontal-scroll', hasScroll);
+            }
+
+            // Check initially and on window resize
+            checkForHorizontalScroll();
+            window.addEventListener('resize', checkForHorizontalScroll);
         });
     </script>
 </body>
