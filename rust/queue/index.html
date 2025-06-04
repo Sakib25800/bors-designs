@@ -204,16 +204,19 @@
             z-index: 2;
         }
 
+        /* Add border only on mobile */
+        @media (max-width: 768px) {
+
+            th:nth-child(2),
+            td:nth-child(2) {
+                border-right: 1px solid rgba(0, 0, 0, 0.1);
+            }
+        }
+
         /* PR number */
         th:nth-child(3),
         td:nth-child(3) {
             width: 120px;
-        }
-
-        /* Add shadow only when table is being scrolled */
-        .table-container.is-scrolling th:nth-child(2),
-        .table-container.is-scrolling td:nth-child(2) {
-            box-shadow: 2px 0 2px -1px rgba(0, 0, 0, 0.05);
         }
 
         /* Status */
