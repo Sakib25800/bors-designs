@@ -27,7 +27,7 @@
         .container {
             max-width: 60em;
             margin: 0 auto;
-            padding: 1rem 1rem 1.5rem 1rem;
+            padding: 1rem 0.75rem 1.5rem 0.75rem;
         }
 
         @media (min-width: 768px) {
@@ -106,6 +106,15 @@
             border-radius: 3px;
             font-size: 0.9em;
             color: #24292f;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            code {
+                font-size: 0.85em;
+                padding: 0.15rem 0.3rem;
+            }
         }
 
         .repos {
@@ -113,8 +122,11 @@
             line-height: 1.8;
         }
 
-        .repos li {
-            margin-bottom: 0.5rem;
+        @media (max-width: 768px) {
+            .repos {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
         }
 
         .command-table {
@@ -128,6 +140,17 @@
             text-align: left;
             padding: 0.75rem;
             border-bottom: 1px solid #ddd;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        @media (max-width: 768px) {
+
+            .command-table th,
+            .command-table td {
+                padding: 0.5rem;
+                font-size: 0.875rem;
+            }
         }
 
         .command-table th {
@@ -143,6 +166,9 @@
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
             color: #24292f;
+            white-space: normal;
+            word-break: break-word;
+            display: inline-block;
         }
 
         .tree-closed {
@@ -170,11 +196,17 @@
         .announcement {
             background: #f6f8fa;
             border-bottom: 1px solid #e1e4e8;
-            padding: 1rem 0;
+            padding: 0.75rem 1rem;
             color: #24292f;
             text-align: center;
             font-size: 0.875rem;
             width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .announcement {
+                padding: 1rem 2rem;
+            }
         }
 
         .announcement strong {
@@ -195,6 +227,13 @@
             transition: all 0.2s ease;
             white-space: nowrap;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.8125rem;
+            }
         }
 
         .btn-primary {
