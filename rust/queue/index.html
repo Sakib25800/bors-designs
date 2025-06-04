@@ -1738,34 +1738,66 @@
                     let groupValue;
                     switch (groupBy) {
                         case 'status':
-                            // Get the status from the status column's text content
-                            const statusCell = $(row).find('td:nth-child(3)'); // Changed from 4 to 3
+                            const statusCell = $(row).find('td:nth-child(3)');
                             console.log(`Row ${index} status cell HTML:`, statusCell.html());
-
                             const statusText = statusCell.find('a').text().trim();
                             console.log(`Row ${index} status text:`, statusText);
-
                             if (statusText) {
                                 groupValue = statusText.charAt(0).toUpperCase() + statusText.slice(1);
                             } else {
                                 groupValue = 'No Status';
                             }
-                            console.log(`Row ${index} final groupValue:`, groupValue);
+                            console.log(`Row ${index} final status groupValue:`, groupValue);
                             break;
                         case 'mergeable':
-                            groupValue = $(row).find('td:nth-child(4)').text().trim() || 'Unknown';
+                            const mergeableCell = $(row).find('td:nth-child(4)');
+                            console.log(`Row ${index} mergeable cell HTML:`, mergeableCell.html());
+                            const mergeableText = mergeableCell.find('span').text().trim();
+                            console.log(`Row ${index} mergeable text:`, mergeableText);
+                            if (mergeableText === 'yes') {
+                                groupValue = 'Yes';
+                            } else if (mergeableText === 'no') {
+                                groupValue = 'No';
+                            } else {
+                                groupValue = 'Unknown';
+                            }
+                            console.log(`Row ${index} final mergeable groupValue:`, groupValue);
                             break;
                         case 'assignee':
-                            groupValue = $(row).find('td:nth-child(8)').text().trim() || 'Unassigned';
+                            const assigneeCell = $(row).find('td:nth-child(7)');
+                            console.log(`Row ${index} assignee cell HTML:`, assigneeCell.html());
+                            groupValue = assigneeCell.text().trim() || 'Unassigned';
+                            console.log(`Row ${index} final assignee groupValue:`, groupValue);
                             break;
                         case 'approvedBy':
-                            groupValue = $(row).find('td:nth-child(9)').text().trim() || 'Not Approved';
+                            const approvedByCell = $(row).find('td:nth-child(8)');
+                            console.log(`Row ${index} approvedBy cell HTML:`, approvedByCell.html());
+                            groupValue = approvedByCell.text().trim() || 'Not Approved';
+                            console.log(`Row ${index} final approvedBy groupValue:`, groupValue);
                             break;
                         case 'priority':
-                            groupValue = $(row).find('td:nth-child(10)').text().trim() || 'No Priority';
+                            const priorityCell = $(row).find('td:nth-child(9)');
+                            console.log(`Row ${index} priority cell HTML:`, priorityCell.html());
+                            const priorityText = priorityCell.text().trim();
+                            console.log(`Row ${index} priority text:`, priorityText);
+                            if (priorityText) {
+                                groupValue = priorityText;
+                            } else {
+                                groupValue = 'No Priority';
+                            }
+                            console.log(`Row ${index} final priority groupValue:`, groupValue);
                             break;
                         case 'rollup':
-                            groupValue = $(row).find('td:nth-child(11)').text().trim() || 'No Rollup';
+                            const rollupCell = $(row).find('td:nth-child(10)');
+                            console.log(`Row ${index} rollup cell HTML:`, rollupCell.html());
+                            const rollupText = rollupCell.find('span').text().trim();
+                            console.log(`Row ${index} rollup text:`, rollupText);
+                            if (rollupText) {
+                                groupValue = rollupText.charAt(0).toUpperCase() + rollupText.slice(1);
+                            } else {
+                                groupValue = 'No Rollup';
+                            }
+                            console.log(`Row ${index} final rollup groupValue:`, groupValue);
                             break;
                     }
 
@@ -1788,7 +1820,7 @@
                             'Success': 3,
                             'Error': 4,
                             'Failure': 5,
-                            'No Status': 999 // Put No Status last
+                            'No Status': 999
                         };
                         return (statusOrder[a[0]] || 99) - (statusOrder[b[0]] || 99);
                     }
@@ -1796,9 +1828,29 @@
                     if (groupBy === 'priority') {
                         const aVal = a[0] === 'No Priority' ? -1 : parseInt(a[0]) || 0;
                         const bVal = b[0] === 'No Priority' ? -1 : parseInt(b[0]) || 0;
-                        if (aVal === -1) return 1; // Put No Priority last
+                        if (aVal === -1) return 1;
                         if (bVal === -1) return -1;
-                        return bVal - aVal; // Higher priority first
+                        return bVal - aVal;
+                    }
+                    // Special sorting for mergeable
+                    if (groupBy === 'mergeable') {
+                        const mergeableOrder = {
+                            'Yes': 1,
+                            'No': 2,
+                            'Unknown': 999
+                        };
+                        return (mergeableOrder[a[0]] || 99) - (mergeableOrder[b[0]] || 99);
+                    }
+                    // Special sorting for rollup
+                    if (groupBy === 'rollup') {
+                        const rollupOrder = {
+                            'Always': 1,
+                            'Maybe': 2,
+                            'Iffy': 3,
+                            'Never': 4,
+                            'No Rollup': 999
+                        };
+                        return (rollupOrder[a[0]] || 99) - (rollupOrder[b[0]] || 99);
                     }
 
                     // For all other groupings, put empty/no-value groups last
