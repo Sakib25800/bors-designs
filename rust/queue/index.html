@@ -1407,11 +1407,12 @@
             font-size: 0.8125rem !important;
             line-height: 1.2 !important;
             letter-spacing: -0.01em !important;
-            height: auto !important;
+            height: 40px !important; /* Fixed height */
             min-height: 40px !important;
-            /* Ensure minimum height */
+            max-height: 40px !important; /* Ensure consistent height */
             display: table-cell !important;
             vertical-align: middle !important;
+            box-sizing: border-box !important; /* Include padding in height calculation */
         }
 
         /* Ensure sticky columns maintain proper z-index */
