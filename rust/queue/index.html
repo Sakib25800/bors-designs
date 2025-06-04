@@ -1443,7 +1443,7 @@
                 <div class="group-container">
                     <select id="group-by" class="group-select">
                         <option value="">No Grouping</option>
-                        <option value="status">Group by Status</option>
+                        <option value="status" selected>Group by Status</option>
                         <option value="mergeable">Group by Mergeable</option>
                         <option value="assignee">Group by Assignee</option>
                         <option value="approvedBy">Group by Approved By</option>
@@ -1666,7 +1666,7 @@
                         <td class="hide">${item.statusOrder}</td>
                         <td><input type="checkbox" data-num="${item.num}" ${checkboxDisabled} ${checkboxChecked}></td>
                         <td><a href="${prUrl}" class="pr-number" target="_blank">${item.num}</a></td>
-                        <td class="${statusClass}">${statusContent}</td>
+                        <td class="status-cell ${statusClass}">${statusContent}</td>
                         <td class="${mergeableClass}">${mergeableContent}</td>
                         <td class="pr-title">${item.title}</td>
                         <td class="wrap-text" style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.headRef}</td>
@@ -1754,7 +1754,7 @@
                     let groupValue;
                     switch (groupBy) {
                         case 'status':
-                            const statusCell = $(row).find('td:nth-child(3)');
+                            const statusCell = $(row).find('.status-cell');
                             console.log(`Row ${index} status cell HTML:`, statusCell.html());
                             const statusText = statusCell.find('a').text().trim();
                             console.log(`Row ${index} status text:`, statusText);
@@ -2026,6 +2026,9 @@
 
             // Show table after DataTables is initialized
             document.querySelector('.table-container').style.display = 'block';
+
+            // Trigger initial grouping by status using the select's change event
+            document.getElementById('group-by').dispatchEvent(new Event('change'));
 
             // Add scroll detection for sticky columns
             const tableContainer = document.querySelector('.table-container');
