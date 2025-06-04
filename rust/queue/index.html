@@ -1192,13 +1192,11 @@
         .status {
             position: relative;
             padding-left: 12px !important;
-            /* 6px strip + 6px gap */
             white-space: nowrap;
             vertical-align: middle !important;
             color: #24292f;
             font-weight: 400;
             font-size: 0.75rem;
-            /* Remove extra vertical padding */
             padding-top: 0 !important;
             padding-bottom: 0 !important;
             line-height: 1.2;
@@ -1208,11 +1206,11 @@
             content: "";
             position: absolute;
             left: 0;
-            top: 0;
-            bottom: 0;
+            top: -1px;
+            bottom: -1px;
             width: 6px;
             background: #eee;
-            /* No border-radius, no margin, flush with cell */
+            z-index: 1;
         }
 
         .status.pending {
