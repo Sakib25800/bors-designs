@@ -1393,6 +1393,11 @@
         .group-content {
             display: table-row-group;
         }
+
+        .status:empty:before {
+            content: "—";
+            color: #dee2e6;
+        }
     </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1595,7 +1600,7 @@
                     // Status logic: blank if empty
                     let statusClass = 'status';
                     if (item.status) statusClass += ' ' + item.status;
-                    let statusContent = item.status ? `<a href="https://github.com/rust-lang/rust/actions/runs/15446931010" target="_blank">${item.status + (item.statusExt || '')}</a>` : '';
+                    let statusContent = item.status ? `<a href="https://github.com/rust-lang/rust/actions/runs/15446931010" target="_blank">${item.status + (item.statusExt || '')}</a>` : '<span class="empty-dash"></span>';
 
                     // Mergeable icon logic
                     let mergeableContent = '';
