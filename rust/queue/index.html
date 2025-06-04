@@ -443,10 +443,6 @@
             cursor: pointer;
         }
 
-        tr.clickable-row:hover td {
-            background-color: #f6f8fa !important;
-        }
-
         tr:last-child td {
             border-bottom: none;
         }
@@ -1193,6 +1189,20 @@
         th:nth-child(2) {
             box-shadow: 0 1px 0 0 rgb(225, 228, 232);
         }
+
+        /* Add alternating row colors with higher specificity */
+        #queue tbody tr:nth-child(even) td {
+            background-color: #f8f9fa !important;
+        }
+
+        #queue tbody tr:nth-child(odd) td {
+            background-color: #ffffff !important;
+        }
+
+        /* Remove hover effect */
+        /* #queue tbody tr:hover td {
+            background-color: #f6f8fa !important;
+        } */
     </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

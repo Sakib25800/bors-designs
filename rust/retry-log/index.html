@@ -117,6 +117,15 @@
             display: table-row;
         }
 
+        /* Add alternating row colors with higher specificity */
+        table tbody tr:nth-child(even) td {
+            background-color: #f8f9fa !important;
+        }
+
+        table tbody tr:nth-child(odd) td {
+            background-color: #ffffff !important;
+        }
+
         th,
         td {
             display: table-cell;
