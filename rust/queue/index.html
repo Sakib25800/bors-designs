@@ -1386,16 +1386,19 @@
 
         /* Group header styles */
         .group-header {
+            position: sticky;
+            z-index: 9;
             background-color: #f0f2f4;
             font-weight: 500;
             color: #24292f;
-            padding: 0.5rem 0.75rem;
-            border-bottom: 1px solid #e1e4e8;
             user-select: none;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .group-header td {
+            position: sticky;
+            top: 32px;
+            /* Adjust this value based on your header height */
             padding: 0.625rem 0.75rem !important;
             background-color: #f0f2f4 !important;
             border-bottom: 1px solid #e1e4e8 !important;
@@ -1404,6 +1407,24 @@
             font-size: 0.8125rem !important;
             line-height: 1.2 !important;
             letter-spacing: -0.01em !important;
+            height: auto !important;
+            min-height: 40px !important;
+            /* Ensure minimum height */
+            display: table-cell !important;
+            vertical-align: middle !important;
+        }
+
+        /* Ensure sticky columns maintain proper z-index */
+        th:nth-child(1),
+        th:nth-child(2) {
+            z-index: 11;
+            /* Higher than regular header */
+        }
+
+        .group-header td:nth-child(1),
+        .group-header td:nth-child(2) {
+            z-index: 10;
+            /* Higher than regular group header */
         }
 
         .group-header .group-count {
